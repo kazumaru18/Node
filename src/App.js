@@ -57,36 +57,6 @@ export default class App extends Component {
     window.location.href = 'http://127.0.0.1:8000/map/map/?q=' + this.state.displayText;
   }
 
-  async fileChange(event) {
-    const audioFile = event.target.files[0];
-    console.log(audioFile);
-    const fileInfo = audioFile.name + ` size=${audioFile.size} bytes `;
-
-    this.setState({
-      displayText: fileInfo
-    });
-
-    const tokenObj = await getTokenOrRefresh();
-    const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
-    speechConfig.speechRecognitionLanguage = 'ja-JP';
-
-    const audioConfig = speechsdk.AudioConfig.fromWavFileInput(audioFile);
-    const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
-
-    recognizer.recognizeOnceAsync(result => {
-      let displayText;
-      if (result.reason === ResultReason.RecognizedSpeech) {
-        displayText = `RECOGNIZED: Text=${result.text}`
-      } else {
-        displayText = 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.';
-      }
-
-      this.setState({
-        displayText: fileInfo + displayText
-      });
-    });
-  }
-
   render() {
     return (
       <Container className="app-container">
@@ -96,17 +66,6 @@ export default class App extends Component {
           <div className="col-6">
             <i className="fas fa-microphone fa-lg mr-2" onClick={() => this.sttFromMic()}></i>
             ←マイクをクリックし、話してください。
-
-            {/* <div className="mt-2">
-                            <label htmlFor="audio-file"><i className="fas fa-file-audio fa-lg mr-2"></i></label>
-                            <input 
-                                type="file" 
-                                id="audio-file" 
-                                onChange={(e) => this.fileChange(e)} 
-                                style={{display: "none"}} 
-                            />
-                            Convert speech to text from an audio file.
-                        </div> */}
           </div>
           <div className="col-6 output-display rounded">
             <code>{this.state.displayText}</code>
