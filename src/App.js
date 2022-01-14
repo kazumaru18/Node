@@ -63,11 +63,11 @@ export default class App extends Component {
         <h1 className="display-4 mb-3">音声認識</h1>
 
         <div className="row main-container">
-          <div className="col-6">
+          <div class="mic-text">
             <i className="fas fa-microphone fa-lg mr-2" onClick={() => this.sttFromMic()}></i>
             ←マイクをクリックし、話してください。
           </div>
-          <div className="col-6 output-display rounded">
+          <div class="mic-text output-display rounded">
             <code>{this.state.displayText}</code>
           </div>
           <button onClick={() => this.mario()}>検索</button>
